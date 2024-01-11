@@ -1,24 +1,43 @@
 import { useEffect, useState } from "react";
 
 import axios from "axios";
-import { Alert, FlatList, StatusBar, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 
 import { Post } from "./components/Post";
 
 export default function App() {
-  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [posts, setPosts] = useState();
 
-  useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/photos")
-      .then((response) => {
-        setPosts(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        Alert.alert("Error :(", "An error occurred while retrieving posts.");
-      });
-  }, []);
+  const fetchPosts = () => {
+    setIsLoading(true);
+    try {
+      const response = axios.get("https://jsonplaceholder.typicode.com/photos");
+      setPosts(response.data);
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => fetchPosts, []);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+        <Text style={{ marginTop: 15 }}>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View>
