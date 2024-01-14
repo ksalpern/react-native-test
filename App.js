@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
 
-import axios from "axios";
+import axios from 'axios';
 import {
   ActivityIndicator,
   Alert,
   FlatList,
+  RefreshControl,
   StatusBar,
   Text,
   View,
-} from "react-native";
+} from 'react-native';
 
-import { Post } from "./components/Post";
+import { Post } from './components/Post';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +38,7 @@ export default function App() {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
-        <Text style={{ marginTop: 15 }}>Loading...</Text>
+        <Text style={{ marginTop: 15 }}>Wait for it...</Text>
       </View>
     );
   }
@@ -43,6 +47,9 @@ export default function App() {
     <View>
       <StatusBar style="auto" />
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={fetchPosts} />
+        }
         data={posts}
         renderItem={({ item }) => (
           <Post title={item.title} imageUrl={item.url} createdAt={item.id} />
