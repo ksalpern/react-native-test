@@ -31,6 +31,13 @@ const PostDate = styled.Text`
   margin-top: 4px;
 `;
 
+const truncateTitle = (title) => {
+  if (title.length > 20) {
+    return title.slice(0, 40) + "...";
+  }
+  return title;
+};
+
 export const Post = ({ title, imageUrl, createdAt }) => {
   return (
     <PostView>
@@ -40,7 +47,7 @@ export const Post = ({ title, imageUrl, createdAt }) => {
         }}
       />
       <PostDetails>
-        <PostTitle>{title}</PostTitle>
+        <PostTitle>{truncateTitle(title)}</PostTitle>
         <PostDate>{createdAt}</PostDate>
       </PostDetails>
     </PostView>
