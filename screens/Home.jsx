@@ -12,7 +12,7 @@ import {
 import { Loading } from "../components/Loading";
 import { Post } from "../components/Post";
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState();
 
@@ -21,7 +21,7 @@ export const HomeScreen = () => {
     axios
       .get("https://jsonplaceholder.typicode.com/photos/")
       .then(({ data }) => {
-        setItems(data);
+        setPosts(data);
       })
       .catch((err) => {
         console.log(err);
@@ -46,7 +46,14 @@ export const HomeScreen = () => {
         }
         data={posts}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => Alert.alert(item.title, item.url)}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("FullPost", {
+                id: item.id,
+                title: item.title,
+              })
+            }
+          >
             <Post title={item.title} imageUrl={item.url} createdAt={item.id} />
           </TouchableOpacity>
         )}

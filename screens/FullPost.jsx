@@ -18,15 +18,18 @@ const PostText = styled.Text`
   line-height: 30px;
 `;
 
-export const FullPostScreen = () => {
+export const FullPostScreen = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [post, setPost] = useState();
 
+  const { id, title } = route.params;
+
   useEffect(() => {
+    navigation.setOptions({ title });
     axios
-      .get("https://jsonplaceholder.typicode.com/photos/" + 1)
+      .get("https://jsonplaceholder.typicode.com/photos/" + id)
       .then(({ data }) => {
-        setData(data);
+        setPost(data);
       })
       .catch((err) => {
         console.log(err);
@@ -43,8 +46,8 @@ export const FullPostScreen = () => {
 
   return (
     <View style={{ padding: 10 }}>
-      <PostImage source={{ uri: data.url }} />
-      <PostText>{data.title}</PostText>
+      <PostImage source={{ uri: post.url }} />
+      <PostText>{post.title}</PostText>
     </View>
   );
 };
